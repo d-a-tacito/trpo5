@@ -6,6 +6,12 @@ namespace trpo5
     {
         public static string _newTaskTitle;
 
+        private static string NewTaskTitle
+        {
+            get => _newTaskTitle;
+            set => _newTaskTitle = value;
+        }
+
         public static ObservableCollection<SimpleTask> Tasks = new();
 
         static void Main(string[] args)
@@ -13,35 +19,27 @@ namespace trpo5
             while (true)
             {
                 Console.WriteLine("Введите название задачи (введите end для завершения):");
-                _newTaskTitle = Console.ReadLine();
+                NewTaskTitle = Console.ReadLine();
 
-                if (_newTaskTitle == "end")
+                if (NewTaskTitle == "end")
                     return;
-                
-                AddTask();
 
-                Console.WriteLine();
-                foreach (var simpleTask in Tasks)
-                {
-                    Console.WriteLine($"{simpleTask.Title}. Статус выполнения задачи - {simpleTask.IsCompleted}");
-                }
-                Console.WriteLine();
+                var taskFactory = new SimpleTaskFactory(NewTaskTitle);
+                taskFactory.AddTask();
+
+                DisplayTasks();
             }
         }
 
-        public static void AddTask()
+        private static void DisplayTasks()
         {
-            if (!string.IsNullOrWhiteSpace(_newTaskTitle))
+            Console.WriteLine();
+            foreach (var simpleTask in Tasks)
             {
-                AddTaskInternal(_newTaskTitle);
-                _newTaskTitle = string.Empty;
+                Console.WriteLine($"{simpleTask.Title}. Статус выполнения задачи - {simpleTask.IsCompleted}");
             }
-        }
 
-        private static void AddTaskInternal(string taskTitle)
-        {
-            Tasks.Add(new SimpleTask { Title = taskTitle });
+            Console.WriteLine();
         }
-
     }
 }
