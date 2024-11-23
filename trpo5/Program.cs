@@ -4,27 +4,22 @@ namespace trpo5
 {
     public class Program
     {
-        public static string _newTaskTitle;
-
-        private static string NewTaskTitle
-        {
-            get => _newTaskTitle;
-            set => _newTaskTitle = value;
-        }
 
         public static ObservableCollection<SimpleTask> Tasks = new();
+
+        private static string _newTaskTitle;
 
         static void Main(string[] args)
         {
             while (true)
             {
                 Console.WriteLine("Введите название задачи (введите end для завершения):");
-                NewTaskTitle = Console.ReadLine();
+                _newTaskTitle = Console.ReadLine();
 
-                if (NewTaskTitle == "end")
+                if (_newTaskTitle == "end")
                     return;
 
-                var taskFactory = new SimpleTaskFactory(NewTaskTitle);
+                var taskFactory = new SimpleTaskFactory(_newTaskTitle);
                 taskFactory.AddTask();
 
                 DisplayTasks();
